@@ -5,7 +5,9 @@ import Cache from '../../lib/Cache';
 
 class ProviderController {
   async index(req, res) {
-    const cached = await Cache.get('providers');
+    const cacheKey = 'providers';
+
+    const cached = await Cache.get(cacheKey);
 
     if (cached) {
       return res.json(cached);
@@ -23,7 +25,7 @@ class ProviderController {
       ],
     });
 
-    Cache.set('providers', providers);
+    Cache.set(cacheKey, providers);
 
     return res.json(providers);
   }

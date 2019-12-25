@@ -3,8 +3,10 @@ import { isBefore, subHours } from 'date-fns';
 import User from '../models/User';
 import Appointment from '../models/Appointment';
 
-import Queue from '../../lib/Queue';
 import CancellationMail from '../jobs/CancellationMail';
+
+import Queue from '../../lib/Queue';
+import Cache from '../../lib/Cache';
 
 class CancelAppointmentService {
   async run({ provider_id, user_id }) {
@@ -38,6 +40,8 @@ class CancelAppointmentService {
     await appointment.save();
 
     await Queue.add(CancellationMail.key, { appointment });
+
+    Cache.invalidatePrefix(`user:${user_id}:appointments:`);
 
     return appointment;
   }

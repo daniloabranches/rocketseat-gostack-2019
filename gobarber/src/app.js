@@ -5,6 +5,7 @@ import path from 'path';
 import * as Sentry from '@sentry/node';
 import Youch from 'youch';
 import helmet from 'helmet';
+import cors from 'cors';
 
 import redis from 'redis';
 import RateLimit from 'express-rate-limit';
@@ -33,6 +34,12 @@ class App {
     this.server.use(Sentry.Handlers.requestHandler());
 
     this.server.use(helmet());
+
+    this.server.use(
+      cors({
+        origin: false,
+      })
+    );
 
     this.server.use(express.json());
 
